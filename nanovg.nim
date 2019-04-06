@@ -120,6 +120,11 @@ type
     IMAGE_PREMULTIPLIED = 1 shl 4     ## Image data has premultiplied alpha.
 
 
+const
+  ANTIALIAS* = 1 shl 0 ## Flag indicating if geometry based anti-aliasing is used (may not be needed when using MSAA).
+  STENCIL_STROKES* = 1 shl 1 ## Flag indicating if strokes should be drawn using stencil buffer.
+    ## The rendering will be a little slower, but path overlaps (i.e. self-intersecting or sharp turns) will be drawn just once.
+  DEBUG* = 1 shl 2 ## Flag indicating that additional debug checks are done.
 
 proc beginFrame*(ctx: ContextPtr; windowWidth: cint; windowHeight: cint; devicePixelRatio: cfloat) {.nvg, importc: "nvgBeginFrame".}
   ## Begin drawing a new frame.
@@ -578,3 +583,23 @@ proc textBreakLines*(ctx: ContextPtr; string: cstring; `end`: cstring; breakRowW
   ## Breaks the specified text into lines. If end is specified only the sub-string will be used.
   ## White space is stripped at the beginning of the rows, the text is split at word boundaries or when new-line characters are encountered.
   ## Words longer than the max width are slit at nearest character (i.e. no hyphenation).
+
+
+# Creates NanoVG contexts for different OpenGL (ES) versions.
+# Flags should be combination of the create flags above.
+
+when defined(nvgGL2):
+  proc CreateGL2*(flags: cint): ContextPtr {.glf2, importc:"nvgCreateGL2".}
+  proc DeleteGL2*(ctx: ContextPtr) {.glf2, importc:"nvgDeleteGL2".}
+elif defined(nvgGL3):
+  proc CreateGL3*(flags: cint): ContextPtr {.glf2, importc:"nvgCreateGL3".}
+  proc DeleteGL3*(ctx: ContextPtr) {.glf2, importc:"nvgDeleteGL3".}
+elif defined(NANOVG_GLES2):
+  proc CreateGLES2*(flags: cint): ContextPtr {.glf2, importc:"nvgCreateGLES2".}
+  proc DeleteGLES2*(ctx: ContextPtr) {.glf2, importc:"nvgDeleteGLES2".}
+elif defined(NANOVG_GLES3):
+  proc CreateGLES3*(flags: cint): ContextPtr {.glf2, importc:"nvgCreateGLES3".}
+  proc DeleteGLES3*(ctx: ContextPtr) {.glf2, importc:"nvgDeleteGLES3".}
+else:
+  proc CreateGL3*(flags: cint): ContextPtr {.glf2, importc:"nvgCreateGL3".}
+  proc DeleteGL3*(ctx: ContextPtr) {.glf2, importc:"nvgDeleteGL3".}
