@@ -7,7 +7,7 @@ testwindow "Scissor", proc(ctx: ContextPtr) =
   ctx.scissor(64*a, 64*a, 256 - 64*a*2, 256 - 64*a*2)
 
   ctx.fillColor(RGBA(0,0,0,255))
-  ctx.beginPath()  # current path is not consumed by ctx.clip()
+  ctx.beginPath()
   ctx.rect(0, 0, 256, 256)
   ctx.fill()
 
