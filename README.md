@@ -4,6 +4,10 @@ NanoVG is small antialiased vector graphics rendering library for OpenGL. It has
 
 It is great for building UIs, visualizations and other graphical things.
 
+## API refrence:
+
+https://treeform.github.io/nanovg/nanovg.html
+
 ## Usage
 
 The NanoVG API is modeled loosely on HTML5 canvas API. If you know canvas, you're up to speed with NanoVG in no time.
